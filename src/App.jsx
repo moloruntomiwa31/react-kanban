@@ -1,29 +1,50 @@
-import { Sun, Moon } from "lucide-react";
-import useTheme from "./hooks/useTheme";
+import { Eye } from "lucide-react";
+import Sidebar from "./components/global/Sidebar";
+import Header from "./components/Header";
+import { useState } from "react";
+import NewBoard from "./components/modals/NewBoard";
+import NewTask from './components/modals/NewTask'
 
 export default function App() {
-  const { theme, toggleTheme } = useTheme();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [openNewBoard, setOpenNewBoard] = useState(false)
+  const [openNewTask, setOpenNewTask] = useState(false);
 
   return (
-    <div className="flex items-center justify-center h-screen flex-col gap-8 bg-white dark:bg-primaryRed transition-colors duration-300">
-      <h1 className="text-2xl font-bold text-black dark:text-white">Hello</h1>
-
-      <div className="flex gap-4 items-center bg-lightGray dark:bg-primaryPurple w-fit p-4 rounded-2xl transition">
-        <Sun className="text-grayColor" />
-
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="sr-only peer"
-            checked={theme === "dark"}
-            onChange={toggleTheme}
+    <main className="h-screen flex flex-col">
+      {/* Header */}
+      <Header onOpenNewTask={() => setOpenNewTask(true)} />
+      {/* Main Layout */}
+      <div className="flex flex-1 overflow-hidden">
+        {isSidebarOpen && (
+          <Sidebar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+            onOpenNewBoard={() => setOpenNewBoard(true)}
           />
-          <div className="w-11 h-6 bg-grayColor peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:bg-primaryDarkPurple transition-all duration-300" />
-          <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 peer-checked:translate-x-full" />
-        </label>
+        )}
+        {/* Eye button when sidebar is hidden */}
+        {!isSidebarOpen && (
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="fixed bottom-8 left-0 z-10 hidden md:block bg-primaryPurple dark:bg-primaryDarkPurple px-6 py-3 rounded-tr-4xl rounded-br-4xl hover:opacity-50 transition duration-300 cursor-pointer"
+          >
+            <Eye size={20} className="text-white" />
+          </button>
+        )}
 
-        <Moon className="text-grayColor" />
+        {/* Content Area */}
+        <div
+          className={`transition-all duration-300 ${isSidebarOpen ? "md:w-[calc(100%-280px)] w-full" : "min-w-full"
+            } h-[calc(100vh-80px)] overflow-auto bg-lightGray dark:bg-primaryDarkPurple p-4`}
+        >
+          <div className="w-[1200px] h-[1500px] relative">
+            {/* overflowing content details */}
+            {openNewBoard && (<NewBoard isOpen={openNewBoard} onClose={() => setOpenNewBoard(false)} />)}
+            {openNewTask && (<NewTask isOpen={openNewTask} onClose={() => setOpenNewTask(false)} />)}
+          </div>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

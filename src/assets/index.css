@@ -19,7 +19,7 @@
 
 @layer base {
   html {
-    @apply transition-colors duration-300;
+    @apply transition-colors duration-500;
   }
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
