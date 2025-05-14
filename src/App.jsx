@@ -2,18 +2,29 @@ import { Eye } from "lucide-react";
 import Sidebar from "./components/global/Sidebar";
 import Header from "./components/Header";
 import { useState } from "react";
-import NewBoard from "./components/modals/NewBoard";
-import NewTask from './components/modals/NewTask'
+import NewBoard from "./components/modals/boards/NewBoard";
+import NewTask from './components/modals/task/NewTask'
+import DeleteBoard from "./components/modals/boards/DeleteBoard";
+import EditBoard from "./components/modals/boards/EditBoard";
+import MobileSidebar from "./components/modals/sidebar/MobileSideBar";
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [openNewBoard, setOpenNewBoard] = useState(false)
+  const [openDeleteBoard, setOpenDeleteBoard] = useState(false)
+  const [openEditBoard, setOpenEditBoard] = useState(false)
   const [openNewTask, setOpenNewTask] = useState(false);
+  const [openMobileSidebar, setOpenMobileSidebar] = useState(false)
 
   return (
     <main className="h-screen flex flex-col">
       {/* Header */}
-      <Header onOpenNewTask={() => setOpenNewTask(true)} />
+      <Header
+        onOpenNewTask={() => setOpenNewTask(true)}
+        onOpenDeleteBoard={() => setOpenDeleteBoard(true)}
+        onOpenEditBoard={() => setOpenEditBoard(true)}
+        onOpenMobileSidebar={() => setOpenMobileSidebar(true)}
+      />
       {/* Main Layout */}
       <div className="flex flex-1 overflow-hidden">
         {isSidebarOpen && (
@@ -42,6 +53,9 @@ export default function App() {
             {/* overflowing content details */}
             {openNewBoard && (<NewBoard isOpen={openNewBoard} onClose={() => setOpenNewBoard(false)} />)}
             {openNewTask && (<NewTask isOpen={openNewTask} onClose={() => setOpenNewTask(false)} />)}
+            {openDeleteBoard && (<DeleteBoard isOpen={openDeleteBoard} onClose={() => setOpenDeleteBoard(false)} />)}
+            {openEditBoard && (<EditBoard isOpen={openEditBoard} onClose={() => setOpenEditBoard(false)} />)}
+            {openMobileSidebar && (<MobileSidebar isOpen={openMobileSidebar} onClose={() => setOpenMobileSidebar(false)} />)}
           </div>
         </div>
       </div>

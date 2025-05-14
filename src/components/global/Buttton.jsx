@@ -21,6 +21,14 @@ export default function Button({
         : "text-white border border-current bg-transparent";
     }
 
+    if (color === "red") {
+      return variant === "solid" ? 'bg-primaryRed text-white' : "text-primaryRed border border-primaryRed bg-transparent"
+    }
+
+    if (color === "gray") {
+      return variant === 'solid' ? 'bg-lightGray text-primaryPurple dark:bg-white' : ''
+    }
+
     return "";
   };
 

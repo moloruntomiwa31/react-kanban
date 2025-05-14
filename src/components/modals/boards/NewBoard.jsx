@@ -1,6 +1,6 @@
-import Modal from '../global/Modal'
-import Input from "../global/Input"
-import Button from '../global/Buttton'
+import Modal from '../../global/Modal'
+import Input from "../../global/Input"
+import Button from '../../global/Buttton'
 import { Plus, CircleX } from "lucide-react"
 
 export default function NewBoard({ isOpen, onClose }) {
@@ -22,9 +22,9 @@ export default function NewBoard({ isOpen, onClose }) {
                             </div>
                         </div>
                         <div className='grid gap-6'>
-                            <Button color="purple" className='text-sm'>
+                            <Button color="purple" className='text-sm dark:bg-white dark:text-primaryPurple'>
                                 <Plus strokeWidth={4} size={10} />
-                                <span>Add New Board</span>
+                                <span>Add New Column</span>
                             </Button>
                             <Button color="purple" className='text-sm'>
                                 Create New Board
