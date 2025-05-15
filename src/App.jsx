@@ -56,6 +56,8 @@ export default function App() {
             {openDeleteBoard && (<DeleteBoard isOpen={openDeleteBoard} onClose={() => setOpenDeleteBoard(false)} />)}
             {openEditBoard && (<EditBoard isOpen={openEditBoard} onClose={() => setOpenEditBoard(false)} />)}
             {openMobileSidebar && (<MobileSidebar isOpen={openMobileSidebar} onClose={() => setOpenMobileSidebar(false)} />)}
+
+              {/* BoardContent */}
           </div>
         </div>
       </div>
