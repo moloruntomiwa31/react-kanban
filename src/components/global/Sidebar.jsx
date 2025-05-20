@@ -2,7 +2,7 @@ import { EyeOff } from "lucide-react";
 import SidebarContent from "../sidebar/SidebarContent";
 import ThemeSwitcher from "./ThemeSwitcher";
 
-export default function Sidebar({ setIsSidebarOpen, isSidebarOpen, onOpenNewBoard }) {
+export default function Sidebar({ setIsSidebarOpen, isSidebarOpen, onOpenNewBoard, boards, activeBoard, setActiveBoard }) {
 
   return (
     <>
@@ -13,13 +13,13 @@ export default function Sidebar({ setIsSidebarOpen, isSidebarOpen, onOpenNewBoar
             }`}
         >
           {/* Content */}
-          <SidebarContent onOpenNewBoard={onOpenNewBoard} />
+          <SidebarContent onOpenNewBoard={onOpenNewBoard} boards={boards} activeBoard={activeBoard} setActiveBoard={setActiveBoard} />
           {/* Footer */}
           <div className="static bottom-3 left-0 right-0 flex flex-col gap-4 mb-2 ml-4 w-10/12">
             <ThemeSwitcher />
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="flex items-center gap-2 hover:bg-lightGray hover:text-primaryPurple  text-primaryPurple dark:text-grayColor dark:hover:text-primaryPurple cursor-pointer p-3 rounded-tr-4xl rounded-br-4xl transition duration-300"
+              className="flex items-center gap-2 hover:bg-lightGray hover:text-primary  Purple  text-primaryPurple dark:text-grayColor dark:hover:text-primaryPurple cursor-pointer p-3 rounded-tr-4xl rounded-br-4xl transition duration-300"
             >
               <EyeOff stroke="gray" size={20} />
               <p className="font-bold">Hide Sidebar</p>
