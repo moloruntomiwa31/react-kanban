@@ -5,7 +5,7 @@ import { Plus, CircleX } from "lucide-react"
 
 export default function NewBoard({ isOpen, onClose }) {
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} zIndex={60}>
             <form className="grid gap-6">
                 <h3 className="font-bold text-lg">Add New Board</h3>
                 <div className="grid gap-6">

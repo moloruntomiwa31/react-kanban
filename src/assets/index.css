@@ -12,6 +12,17 @@
   --breakpoint-md: 768px;
   --breakpoint-mdlg: 1000px;
   --breakpoint-lg: 1280px;
+  --animate-modal: modal 0.2s ease-in-out;
+  @keyframes modal {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
