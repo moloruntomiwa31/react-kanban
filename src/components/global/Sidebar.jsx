@@ -1,8 +1,10 @@
 import { EyeOff } from "lucide-react";
 import SidebarContent from "../sidebar/SidebarContent";
 import ThemeSwitcher from "./ThemeSwitcher";
+import { useSidebarStore } from "../../stores/useAppStore";
 
-export default function Sidebar({ setIsSidebarOpen, isSidebarOpen, onOpenNewBoard, boards, activeBoard, setActiveBoard }) {
+export default function Sidebar({ onOpenNewBoard, boards, activeBoard, setActiveBoard }) {
+  const { isSidebarOpen, setIsSidebarOpen } = useSidebarStore()
 
   return (
     <>

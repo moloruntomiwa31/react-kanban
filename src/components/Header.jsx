@@ -1,10 +1,10 @@
 import { Kanban, ChevronDown, EllipsisVertical, Plus } from "lucide-react";
 import Button from "./global/Buttton";
-import { useState } from "react";
 import EditBoardMenu from "./popover/board/EditBoardMenu";
+import { useModalStore } from "../stores/useAppStore";
 
 export default function Header({ onOpenNewTask, onOpenDeleteBoard, onOpenEditBoard, onOpenMobileSidebar }) {
-  const [openEditBoardMenu, setOpenEditBoardMenu] = useState(false)
+  const { openEditBoardMenu, setOpenEditBoardMenu } = useModalStore()
 
   return (
     <header className="relative px-4 py-4 h-[80px] dark:bg-secondaryPurple shadow flex items-center">

@@ -1,8 +1,8 @@
 import { Sun, Moon } from "lucide-react"
-import useTheme from "../../hooks/useTheme"
+import { useThemeStore } from "../../stores/useAppStore"
 
 export default function ThemeSwitcher() {
-    const { theme, toggleTheme } = useTheme();
+    const { theme, toggleTheme } = useThemeStore();
     return (
         <div className="flex gap-6 items-center justify-center  py-4 px-6 rounded-md transition duration-300 bg-lightGray dark:bg-primaryDarkPurple">
             <Sun fill="gray" stroke="gray" />

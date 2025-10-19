@@ -3,43 +3,52 @@ import Input from "../../global/Input"
 import Select from '../../global/Select'
 import Button from '../../global/Buttton'
 import { Plus, CircleX } from "lucide-react"
-import { useState } from 'react'
-import { useBoardStore } from '../../../stores/useAppStore'
+import { useState, useEffect } from 'react'
+import { useBoardStore, useModalStore } from '../../../stores/useAppStore'
 
-export default function NewTask({ isOpen, onClose }) {
-    const { activeBoard, addTask } = useBoardStore()
+export default function EditTask({ isOpen, onClose }) {
+    const { selectedTask } = useModalStore()
+    const { activeBoard, updateTask } = useBoardStore()
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [subtasks, setSubtasks] = useState([{ title: '', isCompleted: false }])
+    const [subtasks, setSubtasks] = useState([])
     const [status, setStatus] = useState('')
     
     const statusOptions = activeBoard?.columns.map(col => ({ value: col.title, label: col.title })) || []
     
+    useEffect(() => {
+        if (selectedTask) {
+            setTitle(selectedTask.title)
+            setDescription(selectedTask.description || '')
+            setSubtasks(selectedTask.subtasks || [])
+            setStatus(selectedTask.status)
+        }
+    }, [selectedTask])
+    
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (!title.trim()) return
+        if (!title.trim() || !selectedTask) return
         
-        addTask({
+        updateTask(selectedTask.id, {
             title,
             description,
-            status: status || statusOptions[0]?.value,
-            subtasks: subtasks.filter(st => st.title.trim()).map((st, i) => ({ ...st, id: Date.now() + i }))
+            status,
+            subtasks: subtasks.filter(st => st.title.trim())
         })
         
-        setTitle('')
-        setDescription('')
-        setSubtasks([{ title: '', isCompleted: false }])
-        setStatus('')
         onClose()
     }
     
-    const addSubtask = () => setSubtasks([...subtasks, { title: '', isCompleted: false }])
+    const addSubtask = () => setSubtasks([...subtasks, { id: Date.now(), title: '', isCompleted: false }])
     const removeSubtask = (index) => setSubtasks(subtasks.filter((_, i) => i !== index))
     const updateSubtask = (index, title) => setSubtasks(subtasks.map((st, i) => i === index ? { ...st, title } : st))
+    
+    if (!selectedTask) return null
+    
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit} className="grid gap-6">
-                <h3 className="font-bold text-lg">Add New Task</h3>
+                <h3 className="font-bold text-lg">Edit Task</h3>
                 <div className="grid gap-6">
                     <div className='grid gap-2'>
                         <label className='font-bold text-xs text-grayColor dark:text-white'>Task Name</label>
@@ -63,7 +72,7 @@ export default function NewTask({ isOpen, onClose }) {
                         <div className='grid gap-2'>
                             <label className='font-bold text-xs text-grayColor dark:text-white'>Subtasks</label>
                             {subtasks.map((subtask, index) => (
-                                <div key={index} className="flex items-center w-full gap-2">
+                                <div key={subtask.id || index} className="flex items-center w-full gap-2">
                                     <Input 
                                         placeholder="e.g Make wireframes" 
                                         className="grow" 
@@ -100,7 +109,7 @@ export default function NewTask({ isOpen, onClose }) {
                             />
                         </div>
                         <Button type="submit" color="purple" className='text-sm'>
-                            <span>Create Task</span>
+                            <span>Save Changes</span>
                         </Button>
                     </div>
                 </div>
