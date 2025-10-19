@@ -6,7 +6,7 @@ import NewBoard from "./components/modals/boards/NewBoard";
 import NewTask from './components/modals/task/NewTask'
 import DeleteBoard from "./components/modals/boards/DeleteBoard";
 import EditBoard from "./components/modals/boards/EditBoard";
-import MobileSidebar from "./components/modals/sidebar/MobileSideBar";
+import MobileSidebar from "./components/modals/sidebar/MobileSidebar";
 import TaskDetail from "./components/modals/task/TaskDetail";
 import EditTask from "./components/modals/task/EditTask";
 import DeleteTask from "./components/modals/task/DeleteTask";
