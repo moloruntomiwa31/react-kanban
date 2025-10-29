@@ -13,6 +13,8 @@
   --breakpoint-mdlg: 1000px;
   --breakpoint-lg: 1280px;
   --animate-modal: modal 0.2s ease-in-out;
+  --animate-drag: drag 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-drop: drop 0.2s ease-out;
   @keyframes modal {
     0% {
       transform: translateY(100%);
@@ -21,6 +23,22 @@
     100% {
       transform: translateY(0);
       opacity: 1;
+    }
+  }
+  @keyframes drag {
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+    100% {
+      transform: scale(1.05) rotate(2deg);
+    }
+  }
+  @keyframes drop {
+    0% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 }
@@ -35,4 +53,24 @@
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
   } 
+}
+
+@layer utilities {
+  .drag-active {
+    animation: drag 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    z-index: 1000;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .drop-zone-active {
+    background: linear-gradient(135deg, rgba(99, 95, 199, 0.1) 0%, rgba(99, 95, 199, 0.05) 100%);
+    border: 2px dashed #635fc7;
+    animation: pulse 2s infinite;
+  }
+  
+  .task-dragging {
+    opacity: 0.7;
+    transform: rotate(5deg) scale(1.05);
+    transition: all 0.2s ease;
+  }
 }

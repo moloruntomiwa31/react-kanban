@@ -1,7 +1,7 @@
 import { Eye, Plus } from "lucide-react";
 import Sidebar from "./components/global/Sidebar";
 import Header from "./components/Header";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NewBoard from "./components/modals/boards/NewBoard";
 import NewTask from './components/modals/task/NewTask'
 import DeleteBoard from "./components/modals/boards/DeleteBoard";
@@ -21,14 +21,34 @@ export default function App() {
     setOpenTaskDetail, setOpenEditTask, setOpenDeleteTask, setSelectedTask
   } = useModalStore()
   
-  const { boards, activeBoard, setActiveBoard, initializeActiveBoard } = useBoardStore()
+  const { boards, activeBoard, setActiveBoard, initializeActiveBoard, moveTask } = useBoardStore()
   const { isSidebarOpen, setIsSidebarOpen } = useSidebarStore()
   const { initializeTheme } = useThemeStore()
+  
+  const [draggedTask, setDraggedTask] = useState(null)
 
   useEffect(() => {
     initializeTheme()
     initializeActiveBoard()
   }, [])
+
+  const handleDragStart = (e, task) => {
+    setDraggedTask(task)
+    e.dataTransfer.effectAllowed = 'move'
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleDrop = (e, columnTitle) => {
+    e.preventDefault()
+    if (draggedTask && draggedTask.status !== columnTitle) {
+      moveTask(draggedTask.id, columnTitle)
+    }
+    setDraggedTask(null)
+  }
 
   return (
     <main className="h-screen flex flex-col">
@@ -77,23 +97,36 @@ export default function App() {
             {openDeleteTask && (<DeleteTask isOpen={openDeleteTask} onClose={() => setOpenDeleteTask(false)} />)}
 
             {/* BoardContent */}
-            <div className="flex gap-6 h-full">
+            <div className="flex gap-6 h-full relative">
               {
                 activeBoard?.columns.map((column, colIndex) => (
-                  <div key={colIndex} className="w-[250px]">
+                  <div 
+                    key={colIndex} 
+                    className={`w-[250px] min-h-[400px] p-2 rounded-lg transition-all duration-300 ${
+                      draggedTask && draggedTask.status !== column.title
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-dashed border-blue-300 dark:border-blue-600' 
+                        : ''
+                    }`}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, column.title)}
+                  >
                     <div className="flex items-center mb-4 gap-2 font-bold tracking-widest text-grayColor text-sm h-[30px]">
                       <h3>{column.title}</h3>
                       <span>({column.tasks.length})</span>
                     </div>
                     <div className="grid gap-6">
-                      {column.tasks.map((task, taskIndex) => (
+                      {column.tasks.map((task) => (
                         <div 
-                          key={taskIndex} 
+                          key={task.id}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, task)}
+                          className={`bg-white dark:bg-secondaryPurple shadow-md p-6 rounded-md grid gap-y-3 cursor-grab hover:opacity-80 transition-all duration-200 transform hover:scale-105 ${
+                            draggedTask?.id === task.id ? 'opacity-50' : ''
+                          }`}
                           onClick={() => {
                             setSelectedTask(task)
                             setOpenTaskDetail(true)
                           }}
-                          className="bg-white dark:bg-secondaryPurple shadow-md p-6 rounded-md grid gap-y-3 cursor-pointer hover:opacity-80 transition-opacity"
                         >
                           <h3 className="font-bold dark:text-white truncate">{task.title}</h3>
                           <p className="text-grayColor font-bold text-sm">

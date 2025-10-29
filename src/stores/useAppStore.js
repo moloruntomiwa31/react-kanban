@@ -25,7 +25,7 @@ export const useModalStore = create((set) => ({
   setSelectedTask: (task) => set({ selectedTask: task }),
 }))
 
-export const useBoardStore = create((set, get) => ({
+export const useBoardStore = create((set) => ({
   boards: [
     {
       id: 1,
@@ -161,6 +161,39 @@ export const useBoardStore = create((set, get) => ({
           }
         : board
     )
+    return {
+      boards: updatedBoards,
+      activeBoard: updatedBoards.find(b => b.id === state.activeBoard.id)
+    }
+  }),
+  
+  moveTask: (taskId, targetColumnTitle) => set((state) => {
+    const updatedBoards = state.boards.map(board => {
+      if (board.id !== state.activeBoard.id) return board
+      
+      let taskToMove = null
+      const updatedColumns = board.columns.map(col => {
+        const task = col.tasks.find(t => t.id === taskId)
+        if (task) {
+          taskToMove = { ...task, status: targetColumnTitle }
+          return { ...col, tasks: col.tasks.filter(t => t.id !== taskId) }
+        }
+        return col
+      })
+      
+      if (taskToMove) {
+        return {
+          ...board,
+          columns: updatedColumns.map(col => 
+            col.title === targetColumnTitle
+              ? { ...col, tasks: [...col.tasks, taskToMove] }
+              : col
+          )
+        }
+      }
+      return board
+    })
+    
     return {
       boards: updatedBoards,
       activeBoard: updatedBoards.find(b => b.id === state.activeBoard.id)
